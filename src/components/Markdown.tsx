@@ -2,6 +2,7 @@
 
 import type { Components } from "react-markdown";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 const components: Components = {
   img: () => null,
@@ -12,10 +13,12 @@ const components: Components = {
   ),
 };
 
-export function Markdown({ source }: { source: string }) {
+export function Markdown({ source, className }: { source: string; className?: string }) {
   return (
-    <div className="markdown mt-3 text-[14px] leading-relaxed text-fg-muted">
-      <ReactMarkdown components={components}>{source}</ReactMarkdown>
+    <div className={className ?? "markdown mt-3 text-[14px] leading-relaxed text-fg-muted"}>
+      <ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>
+        {source}
+      </ReactMarkdown>
     </div>
   );
 }

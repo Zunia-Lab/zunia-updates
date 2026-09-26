@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { MarkdownField } from "@/components/MarkdownField";
 import { Shell } from "@/components/Shell";
 import { Turnstile } from "@/components/Turnstile";
 import { listProducts } from "@/lib/queries";
@@ -69,18 +70,12 @@ export default async function NewReportPage({
             className="rounded-[12px] border border-[var(--z-line)] bg-[var(--z-surface)] px-3 py-3 text-fg"
           />
         </label>
-        <label className="flex flex-col gap-2 text-[14px]">
-          <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-fg-dim">What happened, or what you want</span>
-          <textarea
-            name="body"
-            required
-            minLength={10}
-            maxLength={4000}
-            rows={8}
-            placeholder={"Markdown is fine.\n\n- what you expected\n- what happened"}
-            className="rounded-[12px] border border-[var(--z-line)] bg-[var(--z-surface)] px-3 py-3 font-mono text-[13px] leading-relaxed text-fg"
-          />
-        </label>
+        <div className="flex flex-col gap-2 text-[14px]">
+          <label htmlFor="report-body" className="font-mono text-[11px] uppercase tracking-[0.14em] text-fg-dim">
+            What happened, or what you want
+          </label>
+          <MarkdownField />
+        </div>
         <label className="flex flex-col gap-2 text-[14px]">
           <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-fg-dim">Emails, optional</span>
           <input
