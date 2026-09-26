@@ -53,9 +53,16 @@ export function cleanReportType(value: FormDataEntryValue | null): ReportType | 
 
 export function cleanContact(value: FormDataEntryValue | null): string | null | FieldError {
   if (typeof value !== "string" || !value.trim()) return null;
-  const text = value.trim();
-  if (text.length > 200 || !EMAIL.test(text)) return "invalid";
-  return text;
+  const parts = value
+    .split(/[,;\n]+/)
+    .map((part) => part.trim())
+    .filter(Boolean);
+  if (parts.length === 0) return null;
+  if (parts.length > 8) return "long";
+  if (parts.some((part) => part.length > 200 || !EMAIL.test(part))) return "invalid";
+  const joined = parts.join(", ");
+  if (joined.length > 1000) return "long";
+  return joined;
 }
 
 export function fieldMessage(error: FieldError): string {

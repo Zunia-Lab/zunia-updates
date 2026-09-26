@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { Logo } from "@/components/Logo";
+import { Markdown } from "@/components/Markdown";
 import { requireAdmin } from "@/lib/admin";
 import { listInbox, listProducts, listReleases } from "@/lib/queries";
 import { KINDS, TRIAGE_STATUSES, formatDay, statusLabel } from "@/lib/types";
@@ -32,9 +34,12 @@ export default async function AdminPage({
   return (
     <div className="mx-auto w-full max-w-3xl px-5 py-8 sm:px-8 sm:py-12">
       <header className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-fg-dim">Zunia</p>
-          <h1 className="mt-1 text-[28px] font-medium tracking-[-0.04em]">Admin</h1>
+        <div className="flex items-center gap-3">
+          <Logo size={32} />
+          <div>
+            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-fg-dim">Zunia</p>
+            <h1 className="mt-1 text-[28px] font-medium leading-none tracking-[-0.04em]">Admin</h1>
+          </div>
         </div>
         <div className="flex items-center gap-4">
           <Link href="/" className="text-[13px] text-fg-dim hover:text-fg">
@@ -120,7 +125,7 @@ export default async function AdminPage({
                   {report.version ? ` · ${report.version}` : ""}
                 </p>
                 {report.contact ? <p className="mt-2 text-[13px] text-fg-muted">{report.contact}</p> : null}
-                <p className="mt-3 whitespace-pre-wrap text-[14px] leading-relaxed text-fg-muted">{report.body}</p>
+                <Markdown source={report.body} />
                 {report.status !== "shipped" ? (
                   <div className="mt-4 flex flex-col gap-4">
                     <form action={setReportStatus} className="flex flex-wrap items-center gap-2">

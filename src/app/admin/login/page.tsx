@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { Logo } from "@/components/Logo";
 import { adminSession } from "@/lib/admin";
 import { login } from "../actions";
 
@@ -16,8 +17,13 @@ export default async function LoginPage({
   const query = await searchParams;
   return (
     <div className="mx-auto flex min-h-full w-full max-w-md flex-col justify-center px-5 py-16">
-      <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-fg-dim">Zunia</p>
-      <h1 className="mt-1 text-[28px] font-medium tracking-[-0.04em]">Admin</h1>
+      <div className="flex items-center gap-3">
+        <Logo size={32} />
+        <div>
+          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-fg-dim">Zunia</p>
+          <h1 className="mt-1 text-[28px] font-medium leading-none tracking-[-0.04em]">Admin</h1>
+        </div>
+      </div>
       {session === "access" ? (
         <p className="mt-6 text-[15px] leading-relaxed text-fg-muted">
           This page is only available through Cloudflare Access.
