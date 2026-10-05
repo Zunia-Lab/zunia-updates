@@ -14,6 +14,14 @@ export function cleanText(value: FormDataEntryValue | null, max: number): string
   return text;
 }
 
+export function cleanNote(value: FormDataEntryValue | null): string | FieldError {
+  if (typeof value !== "string") return "missing";
+  const text = value.trim();
+  if (text.length < 2) return "missing";
+  if (text.length > 2000) return "long";
+  return text;
+}
+
 export function cleanBody(value: FormDataEntryValue | null): string | FieldError {
   if (typeof value !== "string") return "missing";
   const text = value.trim();

@@ -4,7 +4,7 @@ import { Logo } from "@/components/Logo";
 const LINKS = [
   { href: "/", label: "Changelog", id: "changelog" },
   { href: "/versions", label: "Versions", id: "versions" },
-  { href: "/requests", label: "Requests", id: "requests" },
+  { href: "/requests", label: "Reviews", id: "requests" },
 ] as const;
 
 const FOOTER = [

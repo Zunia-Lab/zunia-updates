@@ -2,11 +2,22 @@ import { createHmac, timingSafeEqual } from "node:crypto";
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { createRemoteJWKSet, jwtVerify } from "jose";
+import { isTeam, type Team } from "./types";
 
 export const ADMIN_COOKIE = "zunia_updates_admin";
 
-export function adminSeal(secret: string): string {
-  return createHmac("sha256", secret).update("zunia-updates-admin-v1").digest("base64url");
+export function adminSeal(secret: string, team: Team): string {
+  const mac = createHmac("sha256", secret).update(`zunia-updates-admin-v2:${team}`).digest("base64url");
+  return `${team}.${mac}`;
+}
+
+export function teamFromCookie(secret: string, given: string): Team | null {
+  const dot = given.indexOf(".");
+  if (dot < 1) return null;
+  const team = given.slice(0, dot);
+  if (!isTeam(team)) return null;
+  if (!safeEqual(given, adminSeal(secret, team))) return null;
+  return team;
 }
 
 export function safeEqual(a: string, b: string): boolean {
@@ -67,18 +78,26 @@ function readCookie(header: string | null, name: string): string {
   return "";
 }
 
-export async function adminSession(): Promise<"ok" | "unconfigured" | "anonymous" | "access"> {
+export type AdminGate =
+  | { state: "ok"; team: Team }
+  | { state: "unconfigured" }
+  | { state: "anonymous" }
+  | { state: "access" };
+
+export async function adminSession(): Promise<AdminGate> {
   const access = await accessState();
-  if (access === "missing") return "access";
+  if (access === "missing") return { state: "access" };
   const secret = process.env.ADMIN_TOKEN;
-  if (!secret) return "unconfigured";
+  if (!secret) return { state: "unconfigured" };
   const jar = await cookies();
   const given = jar.get(ADMIN_COOKIE)?.value ?? "";
-  if (!safeEqual(given, adminSeal(secret))) return "anonymous";
-  return "ok";
+  const team = teamFromCookie(secret, given);
+  if (!team) return { state: "anonymous" };
+  return { state: "ok", team };
 }
 
-export async function requireAdmin(): Promise<void> {
+export async function requireAdmin(): Promise<Team> {
   const session = await adminSession();
-  if (session !== "ok") redirect("/admin/login");
+  if (session.state !== "ok") redirect("/admin/login");
+  return session.team;
 }

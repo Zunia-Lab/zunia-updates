@@ -2,7 +2,7 @@ const TEST_SITE_KEY = "1x00000000000000000000AA";
 const TEST_SECRET = "1x0000000000000000000000000000000AA";
 
 export function turnstileSiteKey(): string {
-  const configured = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+  const configured = process.env.TURNSTILE_SITE_KEY || process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
   if (configured) return configured;
   return process.env.NODE_ENV === "production" ? "" : TEST_SITE_KEY;
 }

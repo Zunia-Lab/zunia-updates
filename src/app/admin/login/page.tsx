@@ -13,7 +13,7 @@ export default async function LoginPage({
   searchParams: Promise<{ error?: string }>;
 }) {
   const session = await adminSession();
-  if (session === "ok") redirect("/admin");
+  if (session.state === "ok") redirect("/admin");
   const query = await searchParams;
   return (
     <div className="mx-auto flex min-h-full w-full max-w-md flex-col justify-center px-5 py-16">
@@ -21,18 +21,30 @@ export default async function LoginPage({
         <Logo size={32} />
         <div>
           <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-fg-dim">Zunia</p>
-          <h1 className="mt-1 text-[28px] font-medium leading-none tracking-[-0.04em]">Admin</h1>
+          <h1 className="mt-1 text-[28px] font-medium leading-none tracking-[-0.04em]">Team</h1>
         </div>
       </div>
-      {session === "access" ? (
+      {session.state === "access" ? (
         <p className="mt-6 text-[15px] leading-relaxed text-fg-muted">
           This page is only available through Cloudflare Access.
         </p>
-      ) : session === "unconfigured" ? (
+      ) : session.state === "unconfigured" ? (
         <p className="mt-6 text-[15px] leading-relaxed text-fg-muted">Set ADMIN_TOKEN before signing in.</p>
       ) : (
         <form action={login} className="mt-8 flex flex-col gap-4">
+          <p className="text-[14px] leading-relaxed text-fg-muted">
+            Same token for both teams. Support or Technical is the name on comments you post.
+          </p>
           {query.error ? <p className="text-[14px] text-[var(--z-danger)]">That token was refused.</p> : null}
+          <fieldset className="flex gap-4 border-0 p-0">
+            <legend className="mb-2 font-mono text-[11px] uppercase tracking-[0.14em] text-fg-dim">Team</legend>
+            <label className="flex items-center gap-2 text-[14px]">
+              <input type="radio" name="team" value="support" defaultChecked /> Support
+            </label>
+            <label className="flex items-center gap-2 text-[14px]">
+              <input type="radio" name="team" value="technical" /> Technical
+            </label>
+          </fieldset>
           <label className="flex flex-col gap-2 text-[14px]">
             <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-fg-dim">Token</span>
             <input

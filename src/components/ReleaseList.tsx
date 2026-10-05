@@ -1,5 +1,5 @@
 import { Markdown } from "@/components/Markdown";
-import { kindLabel, type Kind, type ReleaseView } from "@/lib/types";
+import { kindLabel, releaseLabel, type Kind, type ReleaseView } from "@/lib/types";
 
 const KIND_CLASS: Record<Kind, string> = {
   added: "text-fg-dim",
@@ -20,13 +20,7 @@ function releaseDate(value: Date) {
   return { month, day: value.getUTCDate(), year: value.getUTCFullYear() };
 }
 
-export function ReleaseList({
-  releases,
-  showProduct = true,
-}: {
-  releases: ReleaseView[];
-  showProduct?: boolean;
-}) {
+export function ReleaseList({ releases }: { releases: ReleaseView[] }) {
   if (releases.length === 0) {
     return (
       <div className="rounded-[16px] border border-dashed border-[var(--z-line)] px-5 py-10">
@@ -53,11 +47,8 @@ export function ReleaseList({
             </time>
             <div className="min-w-0">
               <header>
-                {showProduct ? (
-                  <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-fg-dim">{release.productName}</p>
-                ) : null}
-                <h3 className={`font-mono text-[28px] leading-none tracking-[-0.04em] ${showProduct ? "mt-2" : ""}`}>
-                  {release.version}
+                <h3 className="font-mono text-[28px] leading-none tracking-[-0.04em]">
+                  {releaseLabel(release.productName, release.version)}
                 </h3>
               </header>
               {release.summary ? (

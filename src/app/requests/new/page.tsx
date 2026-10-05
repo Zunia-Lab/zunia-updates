@@ -33,7 +33,7 @@ export default async function NewReportPage({
       </p>
       {query.sent ? (
         <p className="mt-6 rounded-[16px] border border-[var(--z-line)] bg-[var(--z-surface)] px-5 py-4 text-[15px]">
-          Sent. We read every report. It appears on the board only after we accept it.
+          Sent. We read every report. It appears on Reviews only after we accept it.
         </p>
       ) : null}
       {error ? <p className="mt-6 text-[14px] text-[var(--z-danger)]">{error}</p> : null}
@@ -49,6 +49,7 @@ export default async function NewReportPage({
         </fieldset>
         <label className="flex flex-col gap-2 text-[14px]">
           <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-fg-dim">Product</span>
+          <span className="text-[12px] text-fg-dim">Extension, mobile, wallet, or website. Pick the one this report is about.</span>
           <select
             name="productId"
             required
@@ -96,7 +97,7 @@ export default async function NewReportPage({
             Send
           </button>
           <Link href="/requests" className="text-[13px] text-fg-dim hover:text-fg">
-            Back to requests
+            Back to reviews
           </Link>
         </div>
       </form>

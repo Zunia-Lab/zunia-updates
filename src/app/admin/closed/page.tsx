@@ -2,19 +2,19 @@ import { QueueView } from "@/components/admin/QueueView";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "Needs review" };
+export const metadata = { title: "Closed" };
 
-export default function AdminReviewPage({
+export default function ClosedPage({
   searchParams,
 }: {
   searchParams: Promise<{ saved?: string; error?: string; type?: string; product?: string; page?: string }>;
 }) {
   return (
     <QueueView
-      queue="review"
-      title="Needs review"
-      lede="New reports stay here, and off the public site, until you accept them. Open one to read it, reply, and decide."
-      empty="Nothing waiting."
+      queue="closed"
+      title="Closed"
+      lede="Declined reports and spam. They stay off Reviews. Open one if you want to accept it later."
+      empty="Nothing closed."
       searchParams={searchParams}
     />
   );

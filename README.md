@@ -2,7 +2,7 @@
 
 Public changelog, versions, and reports for Zunia at [updates.zunialab.com](https://updates.zunialab.com).
 
-Releases and changelog entries are written in `/admin`. A user report is not required. Bugs and feature requests use one form. Accepting a report only publishes its title. Shipping it means writing a changelog entry, which then shows on the feed and the versions page with everything else.
+Releases and changelog entries are written in `/admin`. Sign in as Support or Technical with the same token. A comment on a public report shows on the requests board under that team name. Marking a report fixed writes the version onto the changelog and the versions page. The version line always includes the product, for example Extension 0.1.2.
 
 ## Develop
 
@@ -24,8 +24,8 @@ The app listens on `127.0.0.1:3016`. Secrets live in `/srv/zunia/shared/updates.
 | Variable | Purpose |
 |----------|---------|
 | `DATABASE_URL` | Postgres database `zunia_updates` |
-| `ADMIN_TOKEN` | Password for `/admin` |
-| `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Turnstile site key, baked in at build |
+| `ADMIN_TOKEN` | Password for `/admin`. The sign-in form also asks for Support or Technical |
+| `TURNSTILE_SITE_KEY` | Turnstile site key. `NEXT_PUBLIC_TURNSTILE_SITE_KEY` is also accepted |
 | `TURNSTILE_SECRET_KEY` | Turnstile secret. A missing secret rejects every report |
 | `CF_ACCESS_TEAM_DOMAIN` | Optional. Team host, such as `zunia.cloudflareaccess.com` without the scheme |
 | `CF_ACCESS_AUD` | Optional. Access application audience tag |

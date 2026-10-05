@@ -2,19 +2,19 @@ import { QueueView } from "@/components/admin/QueueView";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "Needs review" };
+export const metadata = { title: "Fixed" };
 
-export default function AdminReviewPage({
+export default function FixedPage({
   searchParams,
 }: {
   searchParams: Promise<{ saved?: string; error?: string; type?: string; product?: string; page?: string }>;
 }) {
   return (
     <QueueView
-      queue="review"
-      title="Needs review"
-      lede="New reports stay here, and off the public site, until you accept them. Open one to read it, reply, and decide."
-      empty="Nothing waiting."
+      queue="fixed"
+      title="Fixed"
+      lede="Shipped reviews. Each row names the product and the version it landed in."
+      empty="Nothing fixed yet."
       searchParams={searchParams}
     />
   );

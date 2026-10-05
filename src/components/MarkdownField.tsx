@@ -3,13 +3,34 @@
 import { useEffect, useId, useRef, useState, type ReactNode } from "react";
 import { Markdown } from "@/components/Markdown";
 
-const MAX = 4000;
-const MIN = 10;
+const DEFAULT_MAX = 4000;
+const DEFAULT_MIN = 10;
 
-export function MarkdownField() {
+export function MarkdownField({
+  name = "body",
+  id = "report-body",
+  required = true,
+  minLength = DEFAULT_MIN,
+  maxLength = DEFAULT_MAX,
+  rows = 10,
+  placeholder = "What you expected, and what happened.\n\n- the step you took\n- what you saw",
+  hint = "Markdown is stored as you write it.",
+  defaultValue = "",
+}: {
+  name?: string;
+  id?: string;
+  required?: boolean;
+  minLength?: number;
+  maxLength?: number;
+  rows?: number;
+  placeholder?: string;
+  hint?: string;
+  defaultValue?: string;
+}) {
   const area = useRef<HTMLTextAreaElement>(null);
+  const stored = useRef<HTMLInputElement>(null);
   const selection = useRef({ start: 0, end: 0 });
-  const [source, setSource] = useState("");
+  const [source, setSource] = useState(defaultValue);
   const [narrowMode, setNarrowMode] = useState<"write" | "preview">("write");
   const [mod, setMod] = useState("Ctrl");
   const previewId = useId();
@@ -18,19 +39,10 @@ export function MarkdownField() {
     setMod(/Mac|iPhone|iPad/.test(navigator.userAgent) ? "⌘" : "Ctrl");
   }, []);
 
-  useEffect(() => {
-    const form = area.current?.form;
-    if (!form) return;
-    const onSubmit = (event: SubmitEvent) => {
-      const value = area.current?.value ?? "";
-      if (value.trim().length >= MIN && value.length <= MAX) return;
-      setNarrowMode("write");
-      event.preventDefault();
-      requestAnimationFrame(() => area.current?.reportValidity());
-    };
-    form.addEventListener("submit", onSubmit);
-    return () => form.removeEventListener("submit", onSubmit);
-  }, []);
+  function publish(value: string) {
+    if (stored.current) stored.current.value = value;
+    setSource(value);
+  }
 
   function remember() {
     const el = area.current;
@@ -52,7 +64,7 @@ export function MarkdownField() {
     el.setRangeText(text, from, to, "end");
     el.setSelectionRange(selStart, selEnd);
     selection.current = { start: selStart, end: selEnd };
-    setSource(el.value);
+    publish(el.value);
   }
 
   function wrap(before: string, after: string, placeholder: string) {
@@ -156,6 +168,8 @@ export function MarkdownField() {
   ];
 
   const count = source.length;
+  const nearLimit = count > maxLength - 200;
+  const box = rows > 6 ? "min-h-[220px]" : "min-h-[140px]";
   const showWrite = narrowMode === "write";
   const showPreview = narrowMode === "preview";
 
@@ -186,17 +200,18 @@ export function MarkdownField() {
           </div>
         </div>
         <div className="grid overflow-hidden rounded-b-[11px]">
+          <input ref={stored} type="hidden" name={name} value={source} />
           <textarea
             ref={area}
-            id="report-body"
-            name="body"
-            required
-            minLength={MIN}
-            maxLength={MAX}
-            rows={10}
-            placeholder={"What you expected, and what happened.\n\n- the step you took\n- what you saw"}
+            id={id}
+            required={required}
+            minLength={minLength || undefined}
+            maxLength={maxLength}
+            rows={rows}
+            defaultValue={defaultValue}
+            placeholder={placeholder}
             aria-describedby={previewId}
-            onChange={(event) => setSource(event.target.value)}
+            onChange={(event) => publish(event.target.value)}
             onKeyDown={onKeyDown}
             onKeyUp={remember}
             onMouseUp={remember}
@@ -204,8 +219,8 @@ export function MarkdownField() {
             onBlur={remember}
             className={
               showWrite
-                ? "min-h-[220px] w-full resize-y bg-transparent px-3 py-3 font-mono text-[13px] leading-relaxed text-fg outline-none placeholder:text-fg-dim"
-                : "hidden min-h-[220px] w-full resize-y bg-transparent px-3 py-3 font-mono text-[13px] leading-relaxed text-fg outline-none @min-[640px]:block"
+                ? `${box} w-full resize-y bg-transparent px-3 py-3 font-mono text-[13px] leading-relaxed text-fg outline-none placeholder:text-fg-dim`
+                : `${box} w-full resize-y bg-transparent px-3 py-3 font-mono text-[13px] leading-relaxed text-fg outline-none @max-[639px]:absolute @max-[639px]:h-px @max-[639px]:w-px @max-[639px]:overflow-hidden @max-[639px]:opacity-0`
             }
           />
           <div
@@ -226,9 +241,9 @@ export function MarkdownField() {
         </div>
       </div>
       <div className="flex items-center justify-between gap-3 text-[12px] text-fg-dim">
-        <span>Markdown is stored as you write it.</span>
-        <span className={count > MAX - 200 ? "text-[var(--z-danger)]" : undefined}>
-          {count} / {MAX}
+        <span>{hint}</span>
+        <span className={nearLimit ? "text-[var(--z-danger)]" : undefined}>
+          {count} / {maxLength}
         </span>
       </div>
     </div>
