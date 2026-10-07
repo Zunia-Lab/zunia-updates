@@ -49,7 +49,7 @@ export default async function NewReportPage({
         </fieldset>
         <label className="flex flex-col gap-2 text-[14px]">
           <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-fg-dim">Product</span>
-          <span className="text-[12px] text-fg-dim">Extension, mobile, wallet, or website. Pick the one this report is about.</span>
+          <span className="text-[12px] text-fg-dim">Extension, mobile, dashboard, or website. Pick the one this report is about.</span>
           <select
             name="productId"
             required

@@ -37,7 +37,7 @@ export default async function VersionsPage({
   return (
     <Shell active="versions">
       <p className="max-w-xl text-[15px] leading-relaxed text-fg-muted">
-        Each line names the product and the version. Extension and Mobile use a store version. Wallet and Website use a dated ship.
+        Each line names the product and the version. Extension, Mobile and Dashboard use a version number. Website uses a dated ship.
       </p>
       <div className="mt-10 flex flex-col gap-12">
         {groups.map(({ product, result }) => (
