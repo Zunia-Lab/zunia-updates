@@ -1,46 +1,12 @@
 import Link from "next/link";
 import { Logo } from "@/components/Logo";
-
-const LINKS = [
-  { href: "/", label: "Changelog", id: "changelog" },
-  { href: "/versions", label: "Versions", id: "versions" },
-  { href: "/requests", label: "Reviews", id: "requests" },
-] as const;
-
-const FOOTER = [
-  {
-    title: "Zunia",
-    links: [
-      { label: "Website", href: "https://zunialab.com" },
-      { label: "Documentation", href: "https://docs.zunialab.com" },
-      { label: "Security", href: "https://zunialab.com/security" },
-      { label: "Brand", href: "https://zunialab.com/brand" },
-    ],
-  },
-  {
-    title: "Extension",
-    links: [
-      { label: "Chrome", href: "https://zunialab.com/#platforms" },
-      { label: "Edge", href: "https://zunialab.com/#platforms" },
-      { label: "Firefox", href: "https://zunialab.com/#platforms" },
-      { label: "Safari", href: "https://zunialab.com/#platforms" },
-      { label: "Source", href: "https://github.com/Zunia-Lab/zunia-extension" },
-    ],
-  },
-  {
-    title: "Also",
-    links: [
-      { label: "Mobile", href: "https://github.com/Zunia-Lab/zunia-mobile" },
-      { label: "GitHub", href: "https://github.com/Zunia-Lab" },
-    ],
-  },
-] as const;
+import { FOOTER, REPORT, SECTIONS, type SectionId } from "@/lib/site";
 
 export function Shell({
   active,
   children,
 }: {
-  active: (typeof LINKS)[number]["id"];
+  active: SectionId;
   children: React.ReactNode;
 }) {
   return (
@@ -54,7 +20,7 @@ export function Shell({
           </div>
         </div>
         <nav aria-label="Sections" className="flex flex-wrap gap-2">
-          {LINKS.map((link) => (
+          {SECTIONS.map((link) => (
             <Link
               key={link.id}
               href={link.href}
@@ -69,10 +35,10 @@ export function Shell({
             </Link>
           ))}
           <Link
-            href="/requests/new"
+            href={REPORT.href}
             className="rounded-full border border-[var(--z-line)] px-3 py-1.5 text-[13px] text-fg hover:bg-[var(--z-state-hover)]"
           >
-            Report
+            {REPORT.label}
           </Link>
         </nav>
       </header>

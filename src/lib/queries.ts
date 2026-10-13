@@ -9,6 +9,7 @@ import {
   type EntryView,
   type FixView,
   type Kind,
+  type LatestReleaseView,
   type ProductView,
   type ReleaseView,
   type ReportStatus,
@@ -84,6 +85,41 @@ export async function listReleases(productId?: string): Promise<ReleaseView[]> {
         `${releaseSelect} ORDER BY r.released_on DESC, r.created_at DESC, e.created_at ASC`,
       );
   return groupReleases(rows);
+}
+
+/**
+ * Every product, in the site's order, with the release its changelog shows
+ * first: the same order as `listReleasePage`. Releases are public once
+ * written (there is no draft state), and nothing from reports is read.
+ */
+export async function listLatestReleases(): Promise<LatestReleaseView[]> {
+  const sql = getSql();
+  const rows = await sql<
+    { id: string; name: string; version: string | null; released_on: Date | string | null; summary: string | null }[]
+  >`
+    SELECT p.id, p.name, r.version, r.released_on, r.summary
+    FROM products p
+    LEFT JOIN LATERAL (
+      SELECT version, released_on, summary
+      FROM releases
+      WHERE product_id = p.id
+      ORDER BY released_on DESC, created_at DESC
+      LIMIT 1
+    ) r ON true
+    ORDER BY p.sort
+  `;
+  return rows.map((row) => ({
+    product: { id: row.id, name: row.name },
+    release:
+      row.version && row.released_on
+        ? {
+            version: row.version,
+            releasedOn:
+              row.released_on instanceof Date ? row.released_on : new Date(`${row.released_on}T00:00:00Z`),
+            summary: row.summary ?? "",
+          }
+        : null,
+  }));
 }
 
 export const listReleasePage = cache(async function listReleasePage(

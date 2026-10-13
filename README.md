@@ -2,6 +2,8 @@
 
 Public changelog, versions, and reports for Zunia at [updates.zunialab.com](https://updates.zunialab.com).
 
+`/llms.txt` describes the site for assistants (`src/lib/llms.ts`) and lists the newest release of each product, read at request time. When the database does not answer, it serves the rest.
+
 Releases and changelog entries are written in `/admin`. Sign in as Support or Technical with the same token. A comment on a public report shows on the requests board under that team name. Marking a report fixed writes the version onto the changelog and the versions page. The version line always includes the product, for example Extension 0.1.2.
 
 ## Develop
