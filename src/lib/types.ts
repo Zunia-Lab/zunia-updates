@@ -40,6 +40,12 @@ export type ProductView = {
   name: string;
 };
 
+/** A product and the release its changelog shows first, or null before its first release. */
+export type LatestReleaseView = {
+  product: ProductView;
+  release: { version: string; releasedOn: Date; summary: string } | null;
+};
+
 export type CommentView = {
   id: string;
   reportId: string;

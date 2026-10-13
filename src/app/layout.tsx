@@ -1,13 +1,14 @@
 import type { Metadata, Viewport } from "next";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://updates.zunialab.com"),
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: "Zunia updates",
-    template: "%s · Zunia updates",
+    default: SITE_NAME,
+    template: `%s · ${SITE_NAME}`,
   },
-  description: "Changelog, versions, and a place to report a bug or ask for a feature.",
+  description: SITE_DESCRIPTION,
 };
 
 export const viewport: Viewport = {
