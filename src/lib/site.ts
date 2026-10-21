@@ -31,6 +31,7 @@ export const LINKS = {
   platforms: "https://zunialab.com/#platforms",
   extensionSource: "https://github.com/Zunia-Lab/zunia-extension",
   mobileSource: "https://github.com/Zunia-Lab/zunia-mobile",
+  playStore: "https://play.google.com/store/apps/details?id=com.zunialab.wallet",
   github: "https://github.com/Zunia-Lab",
 } as const;
 
@@ -57,7 +58,8 @@ export const FOOTER = [
   {
     title: "Also",
     links: [
-      { label: "Mobile", href: LINKS.mobileSource },
+      { label: "Google Play", href: LINKS.playStore },
+      { label: "Mobile source", href: LINKS.mobileSource },
       { label: "GitHub", href: LINKS.github },
     ],
   },

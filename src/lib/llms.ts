@@ -101,6 +101,7 @@ ${releases}
 ## Zunia
 
 - [Website](${LINKS.website}): Zunia, its downloads and support
+- [Google Play](${LINKS.playStore}): Official Android install, package com.zunialab.wallet. The iPhone wallet is not this listing
 - [Website llms.txt](${ZUNIA_LINKS.websiteLlms}): Facts about Zunia as a whole
 - [Documentation](${LINKS.docs}): Guides, chain list, and integration reference
 - [Docs llms.txt](${ZUNIA_LINKS.docsLlms}): Every docs page, each also as Markdown
